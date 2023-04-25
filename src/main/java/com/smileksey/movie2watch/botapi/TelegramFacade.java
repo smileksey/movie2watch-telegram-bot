@@ -1,7 +1,8 @@
 package com.smileksey.movie2watch.botapi;
 
 import com.smileksey.movie2watch.KinopoiskApi;
-import com.smileksey.movie2watch.ReplyUtil;
+import com.smileksey.movie2watch.util.Keyboards;
+import com.smileksey.movie2watch.util.ReplyUtil;
 import com.smileksey.movie2watch.cache.UserDataCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,15 +16,13 @@ public class TelegramFacade {
     private final BotStateContext botStateContext;
     private final ReplyUtil replyUtil;
     private final KinopoiskApi kinopoiskApi;
-    private final MainMenuService mainMenuService;
 
     @Autowired
-    public TelegramFacade(UserDataCache userDataCache, BotStateContext botStateContext, ReplyUtil replyUtil, KinopoiskApi kinopoiskApi, MainMenuService mainMenuService) {
+    public TelegramFacade(UserDataCache userDataCache, BotStateContext botStateContext, ReplyUtil replyUtil, KinopoiskApi kinopoiskApi) {
         this.userDataCache = userDataCache;
         this.botStateContext = botStateContext;
         this.replyUtil = replyUtil;
         this.kinopoiskApi = kinopoiskApi;
-        this.mainMenuService = mainMenuService;
     }
 
     public BotApiMethod<?> handleUpdate(Update update) {
@@ -43,14 +42,14 @@ public class TelegramFacade {
         return replyMessage;
     }
 
-    private SendMessage handleInputMessage(Message inputMessage) {
+    public SendMessage handleInputMessage(Message inputMessage) {
         String messageText = inputMessage.getText();
         long userId = inputMessage.getFrom().getId();
         BotState botState;
         SendMessage replyMessage;
 
         switch (messageText) {
-            case "/specify":
+            case "/preferences":
                 botState = BotState.FILLING_PARAMETERS;
                 break;
             default:
@@ -62,7 +61,7 @@ public class TelegramFacade {
         replyMessage = botStateContext.processInputMessage(botState, inputMessage);
 
         if (botState == BotState.DEFAULT && replyMessage.getReplyMarkup() == null) {
-            replyMessage.setReplyMarkup(mainMenuService.getMainMenuKeyboard());
+            replyMessage.setReplyMarkup(Keyboards.getMainMenuKeyboard());
         }
 
         return replyMessage;
@@ -75,16 +74,8 @@ public class TelegramFacade {
         final long userId = callbackQuery.getFrom().getId();
         BotApiMethod<?> callBackAnswer = null;
 
-        if (callbackQuery.getData().equals("random")) {
-            callBackAnswer = handleInputMessage(createMessage(chatId, userId, "/random"));
-        }
-
-        else if (callbackQuery.getData().equals("randomHorror")) {
-            callBackAnswer = handleInputMessage(createMessage(chatId, userId, "/randomhorror"));
-        }
-
-        else if (callbackQuery.getData().equals("customRandom")) {
-            callBackAnswer = handleInputMessage(createMessage(chatId, userId, "/specify"));
+        if (callbackQuery.getData() != null) {
+            callBackAnswer = handleInputMessage(createMessage(chatId, userId, callbackQuery.getData()));
         }
 
         return callBackAnswer;

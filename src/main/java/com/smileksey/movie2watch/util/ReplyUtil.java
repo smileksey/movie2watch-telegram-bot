@@ -1,4 +1,4 @@
-package com.smileksey.movie2watch;
+package com.smileksey.movie2watch.util;
 
 import com.smileksey.movie2watch.models.Movie;
 import org.springframework.stereotype.Component;
@@ -38,15 +38,23 @@ public class ReplyUtil {
         if (movie != null) {
             StringBuilder builder = new StringBuilder();
 
-            builder.append(movie.getName()).append(" ")
-                    .append("(").append(movie.getAlternativeName()).append(")").append(", ")
+            builder.append(movie.getName());
+
+            if (movie.getAlternativeName() != null) {
+                builder.append(" / ").append(movie.getAlternativeName());
+            }
+
+            builder.append("\n")
                     .append(movie.getYear()).append("\n")
                     .append(movie.getCountries()).append("\n")
                     .append("\n")
                     .append("Жанр: ").append(movie.getGenres()).append("\n");
 
             if (movie.getRating() != null) {
-                builder.append("Рейтинг IMDb: ").append(movie.getRating().getImdb()).append("\n");
+                builder
+                        .append("\n")
+                        .append("Рейтинг IMDb: ").append(movie.getRating().getImdb()).append("\n")
+                        .append("Рейтинг Кинопоиск: ").append(movie.getRating().getKp()).append("\n");
             }
 
             builder.append("\n").append(movie.getDescription()).append("\n");
@@ -54,6 +62,7 @@ public class ReplyUtil {
             if (movie.getPoster() != null && movie.getPoster().getUrl() != null) {
                 builder.append(movie.getPoster().getUrl()).append("\n");
             }
+
             if (movie.getVideos() != null && !movie.getVideos().getTrailers().isEmpty()) {
                 builder.append("\n").append("Трейлер: ").append(movie.getVideos().getTrailers().get(0).getUrl());
             }
