@@ -1,4 +1,4 @@
-package com.smileksey.movie2watch.models;
+package com.smileksey.movie2watch.models.kinopoiskmodels;
 
 public class Trailer {
     private String url;

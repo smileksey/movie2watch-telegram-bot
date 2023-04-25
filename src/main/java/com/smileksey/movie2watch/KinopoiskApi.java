@@ -1,15 +1,13 @@
 package com.smileksey.movie2watch;
 
-import com.smileksey.movie2watch.models.Genre;
-import com.smileksey.movie2watch.models.Movie;
-import com.smileksey.movie2watch.models.PaginatedResponse;
-import com.smileksey.movie2watch.models.PossibleGenres;
+import com.smileksey.movie2watch.models.kinopoiskmodels.Genre;
+import com.smileksey.movie2watch.models.kinopoiskmodels.Movie;
+import com.smileksey.movie2watch.models.kinopoiskmodels.PaginatedResponse;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Random;
 

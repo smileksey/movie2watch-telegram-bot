@@ -1,6 +1,6 @@
 package com.smileksey.movie2watch.util;
 
-import com.smileksey.movie2watch.models.Movie;
+import com.smileksey.movie2watch.models.kinopoiskmodels.Movie;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;

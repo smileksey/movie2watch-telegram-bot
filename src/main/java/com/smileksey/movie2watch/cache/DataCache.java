@@ -1,7 +1,7 @@
 package com.smileksey.movie2watch.cache;
 
 import com.smileksey.movie2watch.botapi.BotState;
-
+import com.smileksey.movie2watch.models.UserChoiceData;
 
 
 public interface DataCache {

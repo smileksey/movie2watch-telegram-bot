@@ -1,6 +1,6 @@
 package com.smileksey.movie2watch.util;
 
-import com.smileksey.movie2watch.models.Movie;
+import com.smileksey.movie2watch.models.kinopoiskmodels.Movie;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;

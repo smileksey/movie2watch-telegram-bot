@@ -1,6 +1,7 @@
 package com.smileksey.movie2watch.cache;
 
 import com.smileksey.movie2watch.botapi.BotState;
+import com.smileksey.movie2watch.models.UserChoiceData;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -11,6 +12,8 @@ import java.util.Map;
 @Component
 public class UserDataCache implements DataCache{
     private Map<Long, BotState> usersBotStates = new HashMap<>();
+
+    //Не используется - данные хранятся в БД
     private Map<Long, UserChoiceData> usersChoiceData = new HashMap<>();
 
     @Override
@@ -28,6 +31,7 @@ public class UserDataCache implements DataCache{
         return botState;
     }
 
+    //Не используется - данные хранятся в БД
     @Override
     public UserChoiceData getUsersChoiceData(long userId) {
         UserChoiceData userChoiceData = usersChoiceData.get(userId);
@@ -38,6 +42,7 @@ public class UserDataCache implements DataCache{
         return userChoiceData;
     }
 
+    //Не используется - данные хранятся в БД
     @Override
     public void saveUsersChoiceData(long userId, UserChoiceData userChoiceData) {
         usersChoiceData.put(userId, userChoiceData);
