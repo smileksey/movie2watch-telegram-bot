@@ -6,6 +6,7 @@ import com.smileksey.movie2watch.repositories.UserChoiceDataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.Optional;
 
@@ -26,6 +27,22 @@ public class UserChoiceDataService {
 
     public Optional<UserChoiceData> get(TgUser tgUser) {
         return userChoiceDataRepository.findUserChoiceDataByTgUser(tgUser);
+    }
+
+    @Transactional
+    public UserChoiceData getOrCreateUserChoiceData(TgUser tgUser) {
+
+        UserChoiceData choiceData;
+        Optional<UserChoiceData> optionalUserChoiceData = get(tgUser);
+
+        if (optionalUserChoiceData.isPresent()) {
+            choiceData = optionalUserChoiceData.get();
+        } else {
+            choiceData = new UserChoiceData();
+            choiceData.setTgUser(tgUser);
+            save(choiceData);
+        }
+        return choiceData;
     }
 
 }

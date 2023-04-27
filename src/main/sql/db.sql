@@ -12,3 +12,15 @@ create table user_choice_data (
                                   year varchar(30),
                                   rating varchar(4)
 );
+
+create table movie (
+                       id int primary key,
+                       name varchar,
+                       alternative_name varchar,
+                       year varchar,
+                       description varchar,
+                       added_by_user_id bigint references tg_user(id) on delete restrict,
+                       added_at timestamp,
+                       is_watched boolean,
+                       user_rating int check (user_rating >= 0)
+);

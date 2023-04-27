@@ -15,7 +15,6 @@ public class UrlBuilder {
     }
 
     public static String getKinopoiskUrl(int id) {
-        String url = "https://www.kinopoisk.ru/film/" + id;
-        return url;
+        return "https://www.kinopoisk.ru/film/" + id;
     }
 }

@@ -21,18 +21,15 @@ import java.util.Optional;
 
 @Component
 public class FillingMovieParamsHandler implements InputMessageHandler {
-    private UserDataCache userDataCache;
-    private final ReplyUtil replyUtil;
-    private final KinopoiskApi kinopoiskApi;
-    private final TelegramFacade telegramFacade;
+    private final UserDataCache userDataCache;
+        private final TelegramFacade telegramFacade;
     private final UserChoiceDataService userChoiceDataService;
     private final TgUserService tgUserService;
 
     @Autowired
-    public FillingMovieParamsHandler(UserDataCache userDataCache, ReplyUtil replyUtil, KinopoiskApi kinopoiskApi, @Lazy TelegramFacade telegramFacade, UserChoiceDataService userChoiceDataService, TgUserService tgUserService) {
+    public FillingMovieParamsHandler(UserDataCache userDataCache, @Lazy TelegramFacade telegramFacade,
+                                     UserChoiceDataService userChoiceDataService, TgUserService tgUserService) {
         this.userDataCache = userDataCache;
-        this.replyUtil = replyUtil;
-        this.kinopoiskApi = kinopoiskApi;
         this.telegramFacade = telegramFacade;
         this.userChoiceDataService = userChoiceDataService;
         this.tgUserService = tgUserService;
@@ -54,31 +51,11 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
         long userId = message.getFrom().getId();
         long chatId = message.getChatId();
 
-        TgUser tgUser;
-        UserChoiceData choiceData;
-
         //TODO будет доставаться из БД, а не из памяти
         //UserChoiceData choiceData = userDataCache.getUsersChoiceData(userId);
 
-        Optional<TgUser> optionalTgUser = tgUserService.getUser(userId);
-
-        if (optionalTgUser.isPresent()) {
-            tgUser = optionalTgUser.get();
-        } else {
-            tgUser = new TgUser(message.getFrom().getId(), message.getFrom().getUserName(), message.getFrom().getFirstName(), message.getFrom().getLastName());
-            tgUserService.save(tgUser);
-        }
-
-        Optional<UserChoiceData> optionalUserChoiceData = userChoiceDataService.get(tgUser);
-
-        if (optionalUserChoiceData.isPresent()) {
-            choiceData = optionalUserChoiceData.get();
-        } else {
-            choiceData = new UserChoiceData();
-            choiceData.setTgUser(tgUser);
-            userChoiceDataService.save(choiceData);
-        }
-
+        TgUser tgUser = tgUserService.getOrCreateUserFromMessage(message);
+        UserChoiceData choiceData = userChoiceDataService.getOrCreateUserChoiceData(tgUser);
 
         BotState botState = userDataCache.getUsersCurrentBotState(userId);
 
@@ -120,6 +97,7 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
         if (botState.equals(BotState.PARAMETERS_FILLED)) {
 
             choiceData.setRating(usersAnswer);
+
             replyMessage.setText("Предпочтения сохранены!");
 
             replyMessage.setReplyMarkup(Keyboards.getMainMenuKeyboard());

@@ -6,6 +6,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
+import java.util.List;
+
 @Component
 public class ReplyUtil {
 
@@ -45,6 +47,7 @@ public class ReplyUtil {
             }
 
             builder.append("\n")
+                    .append("\n")
                     .append(movie.getYear()).append("\n")
                     .append(movie.getCountries()).append("\n")
                     .append("\n")
@@ -70,6 +73,50 @@ public class ReplyUtil {
             return builder.toString();
 
         } else return "Произошла ошибка. Попробуйте снова.";
+    }
+
+    public String moviesList(List<Movie> movies) {
+        StringBuilder builder = new StringBuilder();
+        int count = 1;
+
+        for (Movie movie : movies) {
+            builder.append(count).append(") ")
+                    .append(movie.getName());
+
+            if (movie.getAlternativeName() != null) {
+                builder.append(" / ")
+                        .append(movie.getAlternativeName());
+            }
+
+            builder.append("\n")
+                    .append(movie.getYear())
+                    .append("\n")
+                    .append(UrlBuilder.getKinopoiskUrl(movie.getId()))
+                    .append("\n")
+                    .append("\n");
+            count++;
+        }
+        return builder.toString();
+    }
+
+    public String shortMovieDescription(Movie movie) {
+        StringBuilder builder = new StringBuilder();
+
+            builder.append(movie.getName());
+
+            if (movie.getAlternativeName() != null) {
+                builder.append(" / ")
+                        .append(movie.getAlternativeName());
+            }
+
+            builder.append("\n")
+                    .append(movie.getYear())
+                    .append("\n")
+                    .append(UrlBuilder.getKinopoiskUrl(movie.getId()))
+                    .append("\n")
+                    .append("\n");
+
+        return builder.toString();
     }
 
 

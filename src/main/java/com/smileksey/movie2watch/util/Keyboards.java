@@ -67,12 +67,16 @@ public class Keyboards {
         return inlineKeyboardMarkup;
     }
 
-    public static InlineKeyboardMarkup getReSearchButton(String command, Movie movie) {
+    public static InlineKeyboardMarkup getBottomLineButtons(String command, Movie movie) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
         InlineKeyboardButton reSearchButton = new InlineKeyboardButton();
         reSearchButton.setText("Повторить поиск");
         reSearchButton.setCallbackData(command);
+
+        InlineKeyboardButton saveMovieButton = new InlineKeyboardButton();
+        saveMovieButton.setText("Добавить в избранное");
+        saveMovieButton.setCallbackData("/save " + movie.getId());
 
         InlineKeyboardButton kpUrlButton = new InlineKeyboardButton();
         kpUrlButton.setText("Страница на Кинопоиске");
@@ -83,10 +87,56 @@ public class Keyboards {
 
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
         keyboardButtonsRow2.add(reSearchButton);
+        keyboardButtonsRow2.add(saveMovieButton);
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow1);
         rowList.add(keyboardButtonsRow2);
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
+    }
+
+    public static InlineKeyboardMarkup getUnwatchedMoviesButtons(Movie movie) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        InlineKeyboardButton deleteButton = new InlineKeyboardButton();
+        deleteButton.setText("Удалить из списка к просмотру");
+        deleteButton.setCallbackData("/delete " + movie.getId());
+
+        InlineKeyboardButton markAsWatchedButton = new InlineKeyboardButton();
+        markAsWatchedButton.setText("Отметить просмотренным");
+        markAsWatchedButton.setCallbackData("/markaswatched " + movie.getId());
+
+        List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
+        keyboardButtonsRow1.add(deleteButton);
+
+        List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
+        keyboardButtonsRow2.add(markAsWatchedButton);
+
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow1);
+        rowList.add(keyboardButtonsRow2);
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
+    }
+
+    public static InlineKeyboardMarkup getWatchedMoviesButtons(Movie movie) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        InlineKeyboardButton deleteButton = new InlineKeyboardButton();
+        deleteButton.setText("Удалить из просмотренных");
+        deleteButton.setCallbackData("/delete " + movie.getId());
+
+        List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
+        keyboardButtonsRow1.add(deleteButton);
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow1);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
 

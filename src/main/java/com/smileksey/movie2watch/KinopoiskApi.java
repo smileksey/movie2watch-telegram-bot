@@ -94,10 +94,12 @@ public class KinopoiskApi {
         String url = "https://api.kinopoisk.dev/v1/movie/" + id;
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<Movie> response = restTemplate.exchange(url, HttpMethod.GET, constructGetRequest(), Movie.class);
-        Movie movie = response.getBody();
-
-        return movie;
+        try {
+            ResponseEntity<Movie> response = restTemplate.exchange(url, HttpMethod.GET, constructGetRequest(), Movie.class);
+            return response.getBody();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public String getPossibleGenres() {

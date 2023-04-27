@@ -1,6 +1,9 @@
 package com.smileksey.movie2watch.models;
 
+import com.smileksey.movie2watch.models.kinopoiskmodels.Movie;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "tg_user")
@@ -16,6 +19,8 @@ public class TgUser {
     private String lastName;
     @OneToOne(mappedBy = "tgUser")
     private UserChoiceData userChoiceData;
+    @OneToMany(mappedBy = "addedByUser")
+    private List<Movie> addedMovies;
 
     public TgUser() {
     }

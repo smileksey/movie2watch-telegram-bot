@@ -1,21 +1,59 @@
 package com.smileksey.movie2watch.models.kinopoiskmodels;
 
+import com.smileksey.movie2watch.models.TgUser;
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Entity
+@Table(name = "movie")
 public class Movie {
+    @Id
+    @Column(name = "id")
     private int id;
+    @Column(name = "name")
     private String name;
-
+    @Column(name = "alternative_name")
     private String alternativeName;
+    @Column(name = "year")
     private String year;
+    @Column(name = "description")
     private String description;
+    @Transient
     private Poster poster;
+    @Transient
     private List<Country> countries;
+    @Transient
     private List<Genre> genres;
+    @Transient
     private Video videos;
-
-//    @JsonSetter(nulls = Nulls.SKIP)
+    @Transient
     private Rating rating;
+    @ManyToOne
+    @JoinColumn(name = "added_by_user_id", referencedColumnName = "id")
+    private TgUser addedByUser;
+    @Column(name = "added_at")
+    private LocalDateTime addedAt;
+    @Column(name = "is_watched")
+    private boolean isWatched;
+    @Column(name = "user_rating")
+    private int userRating;
+
+    public Movie() {
+    }
+
+    public Movie(int id, String name, String alternativeName, String year, String description, TgUser addedByUser, LocalDateTime addedAt, boolean isWatched, int userRating) {
+        this.id = id;
+        this.name = name;
+        this.alternativeName = alternativeName;
+        this.year = year;
+        this.description = description;
+        this.addedByUser = addedByUser;
+        this.addedAt = addedAt;
+        this.isWatched = isWatched;
+        this.userRating = userRating;
+    }
 
     public int getId() {
         return id;
@@ -95,6 +133,38 @@ public class Movie {
 
     public void setRating(Rating rating) {
         this.rating = rating;
+    }
+
+    public TgUser getAddedByUser() {
+        return addedByUser;
+    }
+
+    public void setAddedByUser(TgUser addedByUser) {
+        this.addedByUser = addedByUser;
+    }
+
+    public LocalDateTime getAddedAt() {
+        return addedAt;
+    }
+
+    public void setAddedAt(LocalDateTime addedAt) {
+        this.addedAt = addedAt;
+    }
+
+    public boolean isWatched() {
+        return isWatched;
+    }
+
+    public void setWatched(boolean watched) {
+        isWatched = watched;
+    }
+
+    public int getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(int userRating) {
+        this.userRating = userRating;
     }
 
     @Override
