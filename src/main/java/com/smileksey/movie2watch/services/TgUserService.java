@@ -37,8 +37,13 @@ public class TgUserService {
         if (optionalTgUser.isPresent()) {
             tgUser = optionalTgUser.get();
         } else {
-            tgUser = new TgUser(message.getFrom().getId(), message.getFrom().getUserName(),
-                                message.getFrom().getFirstName(), message.getFrom().getLastName());
+            tgUser = new TgUser();
+
+            tgUser.setId(message.getFrom().getId());
+            tgUser.setUserName(message.getFrom().getUserName());
+            tgUser.setFirstName(message.getFrom().getFirstName());
+            tgUser.setLastName(message.getFrom().getLastName());
+
             save(tgUser);
         }
         return tgUser;

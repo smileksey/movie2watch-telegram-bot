@@ -26,8 +26,8 @@ public class MovieService {
     }
 
     @Transactional
-    public void save(Movie movie, Message message) {
-        enrichMovieData(movie, message);
+    public void save(Movie movie, TgUser tgUser) {
+        enrichMovieData(movie, tgUser);
         movieRepository.save(movie);
     }
 
@@ -45,18 +45,21 @@ public class MovieService {
     }
 
     @Transactional
-    public void changeWatchedStatus(Movie movie, boolean isWatched, Message message) {
+    public void changeWatchedStatus(Movie movie, boolean isWatched, TgUser tgUser) {
         movie.setWatched(isWatched);
-        save(movie, message);
+        save(movie, tgUser);
     }
+
 
     @Transactional
     public void deleteMovieById(int id) {
         movieRepository.deleteMovieById(id);
     }
 
-    private void enrichMovieData(Movie movie, Message message) {
-        movie.setAddedByUser(tgUserService.getOrCreateUserFromMessage(message));
+
+    @Transactional
+    public void enrichMovieData(Movie movie, TgUser tgUser) {
+        movie.setAddedByUser(tgUser);
         movie.setAddedAt(LocalDateTime.now());
     }
 }

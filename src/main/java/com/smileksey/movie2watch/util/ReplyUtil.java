@@ -12,8 +12,19 @@ import java.util.List;
 public class ReplyUtil {
 
     public SendMessage startReply(long chatId) {
-        String answer = "Привет! Воспользуйся главным меню!";
-        return textReply(chatId, answer);
+        String reply = "Привет! Чтобы начать, нажми 'Подобрать фильм' или воспользуйся меню.\n" +
+                        "Для справки нажми /help";
+        return textReply(chatId, reply);
+    }
+
+    public SendMessage helpReply(long chatId) {
+        String reply = "Для поиска фильма воспользуйся кнопокой 'Подобрать фильм'.\n\n" +
+                "Чтобы найти фильм с учетом твоим предпочтений, сначала укажи их, нажав /preferences. Список доступных жанров - /genres\n\n" +
+                "Понравившиеся фильмы можно сохранять. Для этого под найденным фильмом нажми кнопку 'Добавить в избранное'.\n\n" +
+                "Список сохраненных фильмов можно посмотреть по команде /watchlater.\n\n" +
+                "Фильмы в этом списке можно отметить как просмотренные с помощью соответствующей кнопки.\n\n" +
+                "Список просмотренных фильмов можно увидеть по команде /watched.";
+        return textReply(chatId, reply);
     }
 
     public SendMessage textReply(long chatId, String message) {

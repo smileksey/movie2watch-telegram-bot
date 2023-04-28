@@ -70,28 +70,32 @@ public class TelegramFacade {
     //TODO
     private BotApiMethod<?> processCallBackQuery(CallbackQuery callbackQuery) {
 
-        final long chatId = callbackQuery.getMessage().getChatId();
-        final long userId = callbackQuery.getFrom().getId();
+//        final long chatId = callbackQuery.getMessage().getChatId();
+//        final long userId = callbackQuery.getFrom().getId();
         BotApiMethod<?> callBackAnswer = null;
 
         if (callbackQuery.getData() != null) {
-            callBackAnswer = handleInputMessage(createMessage(chatId, userId, callbackQuery.getData()));
+            callBackAnswer = handleInputMessage(createMessage(callbackQuery));
         }
 
         return callBackAnswer;
     }
 
-    private Message createMessage(long chatId, long userId, String text) {
+    private Message createMessage(CallbackQuery callbackQuery) {
         Message message = new Message();
         User user = new User();
         Chat chat = new Chat();
 
-        user.setId(userId);
-        chat.setId(chatId);
+        user.setId(callbackQuery.getFrom().getId());
+        user.setUserName(callbackQuery.getFrom().getUserName());
+        user.setFirstName(callbackQuery.getFrom().getFirstName());
+        user.setLastName(callbackQuery.getFrom().getLastName());
+
+        chat.setId(callbackQuery.getMessage().getChatId());
 
         message.setFrom(user);
         message.setChat(chat);
-        message.setText(text);
+        message.setText(callbackQuery.getData());
 
         return message;
     }

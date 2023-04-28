@@ -6,7 +6,6 @@ import com.smileksey.movie2watch.models.TgUser;
 import com.smileksey.movie2watch.services.TgUserService;
 import com.smileksey.movie2watch.services.UserChoiceDataService;
 import com.smileksey.movie2watch.util.Keyboards;
-import com.smileksey.movie2watch.util.ReplyUtil;
 import com.smileksey.movie2watch.botapi.BotState;
 import com.smileksey.movie2watch.models.UserChoiceData;
 import com.smileksey.movie2watch.cache.UserDataCache;
@@ -17,12 +16,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.Optional;
 
 @Component
 public class FillingMovieParamsHandler implements InputMessageHandler {
     private final UserDataCache userDataCache;
-        private final TelegramFacade telegramFacade;
+    private final TelegramFacade telegramFacade;
     private final UserChoiceDataService userChoiceDataService;
     private final TgUserService tgUserService;
 
@@ -79,7 +77,7 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
 
             choiceData.setGenre(usersAnswer);
 
-            replyMessage.setText("Укажи год.\nМожно указать период (например: 2000-2010)");
+            replyMessage.setText("Укажи год.\nМожно указать период в формате 'yyyy-yyyy'\n(например 2000-2010)");
 
             userDataCache.setUsersCurrentBotState(userId, BotState.WAIT_FOR_RATING);
 
@@ -89,7 +87,7 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
 
             choiceData.setYear(usersAnswer);
 
-            replyMessage.setText("Укажи минимальный рейтинг imdb:");
+            replyMessage.setText("Укажи минимальный рейтинг imdb (например 6 или 5.5):");
 
             userDataCache.setUsersCurrentBotState(userId, BotState.PARAMETERS_FILLED);
         }

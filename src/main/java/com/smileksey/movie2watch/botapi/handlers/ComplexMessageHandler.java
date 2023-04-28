@@ -7,16 +7,17 @@ import com.smileksey.movie2watch.cache.MovieCache;
 import com.smileksey.movie2watch.models.TgUser;
 import com.smileksey.movie2watch.models.kinopoiskmodels.Movie;
 import com.smileksey.movie2watch.services.MovieService;
+import com.smileksey.movie2watch.services.TgUserService;
 import com.smileksey.movie2watch.util.Keyboards;
 import com.smileksey.movie2watch.util.ReplyUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ComplexMessageHandler implements InputMessageHandler {
@@ -26,14 +27,16 @@ public class ComplexMessageHandler implements InputMessageHandler {
     private final MovieCache movieCache;
     private final KinopoiskApi kinopoiskApi;
     private final Bot bot;
+    private final TgUserService tgUserService;
 
     @Autowired
-    public ComplexMessageHandler(ReplyUtil replyUtil, MovieService movieService, MovieCache movieCache, KinopoiskApi kinopoiskApi, @Lazy Bot bot) {
+    public ComplexMessageHandler(ReplyUtil replyUtil, MovieService movieService, MovieCache movieCache, KinopoiskApi kinopoiskApi, @Lazy Bot bot, TgUserService tgUserService) {
         this.replyUtil = replyUtil;
         this.movieService = movieService;
         this.movieCache = movieCache;
         this.kinopoiskApi = kinopoiskApi;
         this.bot = bot;
+        this.tgUserService = tgUserService;
     }
 
     @Override
@@ -43,6 +46,7 @@ public class ComplexMessageHandler implements InputMessageHandler {
         SendMessage replyMessage = null;
         String[] command = message.getText().split(" ");
         Movie movie;
+        TgUser tgUser;
 
         switch (command[0]) {
             case "/delete":
@@ -51,12 +55,13 @@ public class ComplexMessageHandler implements InputMessageHandler {
                 break;
 
             case "/save":
-                //Movie movie = movieCache.getMovie(Integer.parseInt(command[1]));
+                tgUser = tgUserService.getOrCreateUserFromMessage(message);
                 movie = kinopoiskApi.getMovieById(Integer.parseInt(command[1]));
 
                 if (movie != null) {
-                    movieService.save(movie, message);
+                    movieService.save(movie, tgUser);
                 }
+
                 replyMessage = replyUtil.textReply(chatId, "Фильм сохранен!");
                 break;
 
@@ -72,7 +77,8 @@ public class ComplexMessageHandler implements InputMessageHandler {
 
                 if (movie != null) {
                     try {
-                        movieService.changeWatchedStatus(movie, true, message);
+                        tgUser = tgUserService.getOrCreateUserFromMessage(message);
+                        movieService.changeWatchedStatus(movie, true, tgUser);
                         replyMessage = replyUtil.textReply(chatId, "Фильм отмечен как просмотренный");
                     } catch (Exception e) {
                         replyMessage = replyUtil.textReply(chatId, "Не удалось применить Изменения. Попробуйте еще раз.");

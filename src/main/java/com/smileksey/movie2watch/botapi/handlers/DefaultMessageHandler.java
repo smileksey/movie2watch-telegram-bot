@@ -48,26 +48,31 @@ public class DefaultMessageHandler implements InputMessageHandler{
         long userId = message.getFrom().getId();
         long chatId = message.getChatId();
         SendMessage replyMessage = null;
+        Movie movie;
 
         switch (message.getText()) {
             case "/start":
                 replyMessage = replyUtil.startReply(message.getChatId());
                 break;
 
+            case "/help":
+                replyMessage = replyUtil.helpReply(message.getChatId());
+                break;
+
             case "/random":
-                Movie randomMovie = kinopoiskApi.getRandomMovie();
+                movie = kinopoiskApi.getRandomMovie();
                 //movieCache.putMovie(randomMovie.getId(), randomMovie);
 
-                replyMessage = replyUtil.textReply(chatId, replyUtil.movieDescription(randomMovie));
-                replyMessage.setReplyMarkup(Keyboards.getBottomLineButtons(message.getText(), randomMovie));
+                replyMessage = replyUtil.textReply(chatId, replyUtil.movieDescription(movie));
+                replyMessage.setReplyMarkup(Keyboards.getBottomLineButtons(message.getText(), movie));
                 break;
 
             case "/randomhorror":
-                Movie randomHorrorMovie = kinopoiskApi.getRandomHorrorMovie();
+                movie = kinopoiskApi.getRandomHorrorMovie();
                 //movieCache.putMovie(randomHorrorMovie.getId(), randomHorrorMovie);
 
-                replyMessage = replyUtil.textReply(chatId, replyUtil.movieDescription(randomHorrorMovie));
-                replyMessage.setReplyMarkup(Keyboards.getBottomLineButtons(message.getText(), randomHorrorMovie));
+                replyMessage = replyUtil.textReply(chatId, replyUtil.movieDescription(movie));
+                replyMessage.setReplyMarkup(Keyboards.getBottomLineButtons(message.getText(), movie));
                 break;
 
             case "/genres":
@@ -81,14 +86,14 @@ public class DefaultMessageHandler implements InputMessageHandler{
 
                 if (userChoiceData != null && userChoiceData.getRating() != null) {
 
-                    Movie movie = kinopoiskApi.getRandomMovieByUrl(UrlBuilder.buildUrl(userChoiceData.getGenre(), userChoiceData.getYear(), userChoiceData.getRating()));
+                    movie = kinopoiskApi.getRandomMovieByUrl(UrlBuilder.buildUrl(userChoiceData.getGenre(), userChoiceData.getYear(), userChoiceData.getRating()));
 
                     if (movie != null) {
                         replyMessage = replyUtil.textReply(chatId, replyUtil.movieDescription(movie));
                         replyMessage.setReplyMarkup(Keyboards.getBottomLineButtons(message.getText(), movie));
                         //movieCache.putMovie(movie.getId(), movie);
                     } else {
-                        replyMessage = replyUtil.textReply(chatId, "Произошла ошибка. Возможно, предпочтения заполнены некорректно. Попробуйте заполнить их снова и повторите попытку.");
+                        replyMessage = replyUtil.textReply(chatId, "Произошла ошибка. Возможно, предпочтения заполнены некорректно. Попробуйте заполнить их снова (/preferences) и повторите попытку.");
                     }
 
                 } else {
