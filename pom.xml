@@ -10,6 +10,7 @@
 	</parent>
 	<groupId>com.smileksey</groupId>
 	<artifactId>movie2watch-telegram-bot</artifactId>
+	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>movie2watch-telegram-bot</name>
 	<description>Telegram bot application for exploring new movies</description>
@@ -59,6 +60,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
