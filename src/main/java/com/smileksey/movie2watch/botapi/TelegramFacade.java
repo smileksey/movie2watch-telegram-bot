@@ -1,8 +1,6 @@
 package com.smileksey.movie2watch.botapi;
 
-import com.smileksey.movie2watch.KinopoiskApi;
 import com.smileksey.movie2watch.util.Keyboards;
-import com.smileksey.movie2watch.util.ReplyUtil;
 import com.smileksey.movie2watch.cache.UserDataCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,15 +12,11 @@ import org.telegram.telegrambots.meta.api.objects.*;
 public class TelegramFacade {
     private final UserDataCache userDataCache;
     private final BotStateContext botStateContext;
-    private final ReplyUtil replyUtil;
-    private final KinopoiskApi kinopoiskApi;
 
     @Autowired
-    public TelegramFacade(UserDataCache userDataCache, BotStateContext botStateContext, ReplyUtil replyUtil, KinopoiskApi kinopoiskApi) {
+    public TelegramFacade(UserDataCache userDataCache, BotStateContext botStateContext) {
         this.userDataCache = userDataCache;
         this.botStateContext = botStateContext;
-        this.replyUtil = replyUtil;
-        this.kinopoiskApi = kinopoiskApi;
     }
 
     public BotApiMethod<?> handleUpdate(Update update) {
@@ -67,18 +61,8 @@ public class TelegramFacade {
         return replyMessage;
     }
 
-    //TODO
     private BotApiMethod<?> processCallBackQuery(CallbackQuery callbackQuery) {
-
-//        final long chatId = callbackQuery.getMessage().getChatId();
-//        final long userId = callbackQuery.getFrom().getId();
-        BotApiMethod<?> callBackAnswer = null;
-
-        if (callbackQuery.getData() != null) {
-            callBackAnswer = handleInputMessage(createMessage(callbackQuery));
-        }
-
-        return callBackAnswer;
+        return handleInputMessage(createMessage(callbackQuery));
     }
 
     private Message createMessage(CallbackQuery callbackQuery) {

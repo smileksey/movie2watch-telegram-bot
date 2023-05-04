@@ -9,5 +9,4 @@ public interface InputMessageHandler {
 
     BotState getHandlerName();
 
-
 }

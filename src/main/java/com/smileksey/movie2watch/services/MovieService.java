@@ -6,7 +6,6 @@ import com.smileksey.movie2watch.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,12 +16,10 @@ import java.util.Optional;
 public class MovieService {
 
     private final MovieRepository movieRepository;
-    private final TgUserService tgUserService;
 
     @Autowired
-    public MovieService(MovieRepository movieRepository, TgUserService tgUserService) {
+    public MovieService(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
-        this.tgUserService = tgUserService;
     }
 
     @Transactional
@@ -50,12 +47,10 @@ public class MovieService {
         save(movie, tgUser);
     }
 
-
     @Transactional
     public void deleteMovieById(int id) {
         movieRepository.deleteMovieById(id);
     }
-
 
     @Transactional
     public void enrichMovieData(Movie movie, TgUser tgUser) {

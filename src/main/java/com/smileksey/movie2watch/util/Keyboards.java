@@ -40,10 +40,6 @@ public class Keyboards {
         random.setText("Случайный фильм");
         random.setCallbackData("/random");
 
-        InlineKeyboardButton randomHorror = new InlineKeyboardButton();
-        randomHorror.setText("Случайный фильм ужасов");
-        randomHorror.setCallbackData("/randomhorror");
-
         InlineKeyboardButton customRandom = new InlineKeyboardButton();
         customRandom.setText("Случайный фильм по указанным предпочтениям");
         customRandom.setCallbackData("/customrandom");
@@ -52,15 +48,11 @@ public class Keyboards {
         keyboardButtonsRow1.add(random);
 
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
-        keyboardButtonsRow2.add(randomHorror);
-
-        List<InlineKeyboardButton> keyboardButtonsRow3 = new ArrayList<>();
-        keyboardButtonsRow3.add(customRandom);
+        keyboardButtonsRow2.add(customRandom);
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow1);
         rowList.add(keyboardButtonsRow2);
-        rowList.add(keyboardButtonsRow3);
 
         inlineKeyboardMarkup.setKeyboard(rowList);
 
@@ -114,7 +106,6 @@ public class Keyboards {
 
         List<InlineKeyboardButton> keyboardButtonsRow2 = new ArrayList<>();
         keyboardButtonsRow2.add(markAsWatchedButton);
-
 
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow1);

@@ -2,14 +2,12 @@ package com.smileksey.movie2watch.cache;
 
 import com.smileksey.movie2watch.botapi.BotState;
 import com.smileksey.movie2watch.models.UserChoiceData;
-import com.smileksey.movie2watch.models.kinopoiskmodels.Movie;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /*Хранение текущего состояния бота и критериев выбора фильма для каждого пользователя*/
-
 @Component
 public class UserDataCache implements DataCache{
     private Map<Long, BotState> usersBotStates = new HashMap<>();

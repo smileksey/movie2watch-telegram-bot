@@ -27,7 +27,6 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
         try {
             execute(telegramFacade.handleUpdate(update));
         } catch (TelegramApiException e) {

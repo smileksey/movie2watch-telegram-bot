@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
@@ -67,14 +66,6 @@ public class DefaultMessageHandler implements InputMessageHandler{
                 replyMessage.setReplyMarkup(Keyboards.getBottomLineButtons(message.getText(), movie));
                 break;
 
-            case "/randomhorror":
-                movie = kinopoiskApi.getRandomHorrorMovie();
-                //movieCache.putMovie(randomHorrorMovie.getId(), randomHorrorMovie);
-
-                replyMessage = replyUtil.textReply(chatId, replyUtil.movieDescription(movie));
-                replyMessage.setReplyMarkup(Keyboards.getBottomLineButtons(message.getText(), movie));
-                break;
-
             case "/genres":
                 replyMessage = replyUtil.textReply(chatId, kinopoiskApi.getPossibleGenres());
                 break;
@@ -82,7 +73,7 @@ public class DefaultMessageHandler implements InputMessageHandler{
             case "/customrandom":
 
                 //UserChoiceData userChoiceData = userDataCache.getUsersChoiceData(userId);
-                UserChoiceData userChoiceData = userChoiceDataService.get(new TgUser(userId)).orElse(null);
+                UserChoiceData userChoiceData = userChoiceDataService.getUserChoiceData(new TgUser(userId)).orElse(null);
 
                 if (userChoiceData != null && userChoiceData.getRating() != null) {
 

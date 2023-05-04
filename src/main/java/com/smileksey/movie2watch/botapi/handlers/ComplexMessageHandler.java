@@ -10,14 +10,12 @@ import com.smileksey.movie2watch.services.MovieService;
 import com.smileksey.movie2watch.services.TgUserService;
 import com.smileksey.movie2watch.util.Keyboards;
 import com.smileksey.movie2watch.util.ReplyUtil;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
-import java.util.Optional;
 
 @Component
 public class ComplexMessageHandler implements InputMessageHandler {

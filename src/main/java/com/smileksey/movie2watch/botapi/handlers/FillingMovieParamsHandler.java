@@ -1,6 +1,5 @@
 package com.smileksey.movie2watch.botapi.handlers;
 
-import com.smileksey.movie2watch.KinopoiskApi;
 import com.smileksey.movie2watch.botapi.TelegramFacade;
 import com.smileksey.movie2watch.models.TgUser;
 import com.smileksey.movie2watch.services.TgUserService;
@@ -49,9 +48,7 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
         long userId = message.getFrom().getId();
         long chatId = message.getChatId();
 
-        //TODO будет доставаться из БД, а не из памяти
-        //UserChoiceData choiceData = userDataCache.getUsersChoiceData(userId);
-
+        //Если пользователь и его предпочтения уже есть в БД - получаем, если нет - создаем новую запись в БД
         TgUser tgUser = tgUserService.getOrCreateUserFromMessage(message);
         UserChoiceData choiceData = userChoiceDataService.getOrCreateUserChoiceData(tgUser);
 
@@ -64,7 +61,6 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
             userDataCache.setUsersCurrentBotState(userId, BotState.DEFAULT);
             return telegramFacade.handleInputMessage(message);
         }
-
 
         if (botState.equals(BotState.WAIT_FOR_GENRE)) {
             replyMessage.setText("Выбери жанр (или введи свой)");
@@ -80,7 +76,6 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
             replyMessage.setText("Укажи год.\nМожно указать период в формате 'yyyy-yyyy'\n(например 2000-2010)");
 
             userDataCache.setUsersCurrentBotState(userId, BotState.WAIT_FOR_RATING);
-
         }
 
         if (botState.equals(BotState.WAIT_FOR_RATING)) {
@@ -103,7 +98,7 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
             userDataCache.setUsersCurrentBotState(userId, BotState.DEFAULT);
         }
 
-        //userDataCache.saveUsersChoiceData(userId, choiceData);
+        //сохраняем предпочтения пользователя в БД
         userChoiceDataService.save(choiceData);
 
         return replyMessage;

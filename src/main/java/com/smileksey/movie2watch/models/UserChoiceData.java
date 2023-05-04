@@ -1,6 +1,5 @@
 package com.smileksey.movie2watch.models;
 
-import com.smileksey.movie2watch.models.TgUser;
 import jakarta.persistence.*;
 
 /*Критерии для поиска фильмов, указанные пользователем*/

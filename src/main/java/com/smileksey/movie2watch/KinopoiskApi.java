@@ -74,10 +74,7 @@ public class KinopoiskApi {
 
         Random random = new Random();
 
-//        int randomPage = (random.nextInt() * (pageCount - 1)) + 1;
-        int randomPage = random.nextInt(pageCount) + 1;
-
-        return randomPage;
+        return random.nextInt(pageCount) + 1;
     }
 
     private PaginatedResponse getPaginatedResponse(String url) {
@@ -107,8 +104,7 @@ public class KinopoiskApi {
         String url = "https://api.kinopoisk.dev/v1/movie/possible-values-by-field?field=genres.name";
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<List<Genre>> response = restTemplate.exchange(url, HttpMethod.GET, constructGetRequest(), new ParameterizedTypeReference<List<Genre>>() {
-        });
+        ResponseEntity<List<Genre>> response = restTemplate.exchange(url, HttpMethod.GET, constructGetRequest(), new ParameterizedTypeReference<List<Genre>>() {});
 
         possibleGenresList = response.getBody();
 
@@ -119,23 +115,6 @@ public class KinopoiskApi {
 
         return builder.toString();
     }
-
-//    private int getRandomHorrorMovieId(int randomPage) {
-//        StringBuilder urlBuilder = new StringBuilder();
-//        urlBuilder.append(HORROR_FILTERED_URL)
-//                .append("&page=")
-//                .append(randomPage);
-//
-//        PaginatedResponse paginatedResponse = getPaginatedResponse(urlBuilder.toString());
-//
-//        int id = paginatedResponse.getDocs().get(0).getId();
-////        System.out.println(id);
-//
-//        return id;
-//    }
-
-
-
 
 
 }
