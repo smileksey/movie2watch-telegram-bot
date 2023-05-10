@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,6 +41,7 @@ public class TgUserService {
             tgUser = new TgUser();
 
             tgUser.setId(message.getFrom().getId());
+            tgUser.setChatId(message.getChatId());
             tgUser.setUserName(message.getFrom().getUserName());
             tgUser.setFirstName(message.getFrom().getFirstName());
             tgUser.setLastName(message.getFrom().getLastName());
@@ -47,5 +49,15 @@ public class TgUserService {
             save(tgUser);
         }
         return tgUser;
+    }
+
+    public List<TgUser> getSubscribedUsers() {
+        return tgUserRepository.findAllByIsSubscribed(true);
+    }
+
+    @Transactional
+    public void setUsersSubscriptionStatus(TgUser user, boolean isSubscribed) {
+        user.setSubscribed(isSubscribed);
+        save(user);
     }
 }

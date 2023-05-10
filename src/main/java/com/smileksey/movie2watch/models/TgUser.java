@@ -11,6 +11,8 @@ public class TgUser {
     @Id
     @Column(name = "id")
     private long id;
+    @Column(name = "chat_id")
+    private long chatId;
     @Column(name = "user_name")
     private String userName;
     @Column(name = "first_name")
@@ -21,15 +23,19 @@ public class TgUser {
     private UserChoiceData userChoiceData;
     @OneToMany(mappedBy = "addedByUser")
     private List<Movie> addedMovies;
+    @Column(name = "is_subscribed")
+    private boolean isSubscribed;
 
     public TgUser() {
     }
 
-    public TgUser(long id, String userName, String firstName, String lastName) {
+    public TgUser(long id, long chatId, String userName, String firstName, String lastName, boolean isSubscribed) {
         this.id = id;
+        this.chatId = chatId;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.isSubscribed = isSubscribed;
     }
 
     public TgUser(long id) {
@@ -42,6 +48,14 @@ public class TgUser {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(long chatId) {
+        this.chatId = chatId;
     }
 
     public String getUserName() {
@@ -74,6 +88,14 @@ public class TgUser {
 
     public void setUserChoiceData(UserChoiceData userChoiceData) {
         this.userChoiceData = userChoiceData;
+    }
+
+    public boolean isSubscribed() {
+        return isSubscribed;
+    }
+
+    public void setSubscribed(boolean subscribed) {
+        isSubscribed = subscribed;
     }
 
     @Override

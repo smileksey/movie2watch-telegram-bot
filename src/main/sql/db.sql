@@ -24,3 +24,6 @@ create table movie (
                        is_watched boolean,
                        user_rating int check (user_rating >= 0)
 );
+
+alter table tg_user add column chat_id bigint not null default 0;
+alter table tg_user add column is_subscribed  boolean default false;

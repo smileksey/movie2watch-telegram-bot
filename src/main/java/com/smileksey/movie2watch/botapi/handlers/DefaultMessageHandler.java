@@ -5,6 +5,7 @@ import com.smileksey.movie2watch.KinopoiskApi;
 import com.smileksey.movie2watch.cache.MovieCache;
 import com.smileksey.movie2watch.models.TgUser;
 import com.smileksey.movie2watch.services.MovieService;
+import com.smileksey.movie2watch.services.TgUserService;
 import com.smileksey.movie2watch.services.UserChoiceDataService;
 import com.smileksey.movie2watch.util.Keyboards;
 import com.smileksey.movie2watch.util.ReplyUtil;
@@ -17,7 +18,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
@@ -29,15 +29,17 @@ public class DefaultMessageHandler implements InputMessageHandler{
     private final UserDataCache userDataCache;
     private final UserChoiceDataService userChoiceDataService;
     private final MovieService movieService;
+    private final TgUserService tgUserService;
     private final Bot bot;
     private final MovieCache movieCache;
 
-    public DefaultMessageHandler(ReplyUtil replyUtil, KinopoiskApi kinopoiskApi, UserDataCache userDataCache, UserChoiceDataService userChoiceDataService, MovieService movieService, @Lazy Bot bot, MovieCache movieCache) {
+    public DefaultMessageHandler(ReplyUtil replyUtil, KinopoiskApi kinopoiskApi, UserDataCache userDataCache, UserChoiceDataService userChoiceDataService, MovieService movieService, TgUserService tgUserService, @Lazy Bot bot, MovieCache movieCache) {
         this.replyUtil = replyUtil;
         this.kinopoiskApi = kinopoiskApi;
         this.userDataCache = userDataCache;
         this.userChoiceDataService = userChoiceDataService;
         this.movieService = movieService;
+        this.tgUserService = tgUserService;
         this.bot = bot;
         this.movieCache = movieCache;
     }
@@ -100,6 +102,14 @@ public class DefaultMessageHandler implements InputMessageHandler{
                 replyMessage = sendFavoriteMovies(chatId, userId, true);
                 break;
 
+            case "/subscribe":
+                replyMessage = setSubscription(message, true);
+                break;
+
+            case "/unsubscribe":
+                replyMessage = setSubscription(message, false);
+                break;
+
             default:
                 replyMessage = replyUtil.textReply(chatId, "Извините, я не знаю такой команды...");
                 break;
@@ -116,13 +126,7 @@ public class DefaultMessageHandler implements InputMessageHandler{
     private SendMessage sendFavoriteMovies(long chatId, long userId, boolean isWatched) {
 
         SendMessage replyMessage;
-        String reply = "";
-
-        if (isWatched) {
-            reply = "Ваш список просмотренных фильмов";
-        } else {
-            reply = "Ваш список фильмов к просмотру";
-        }
+        String reply = isWatched ? "Ваш список просмотренных фильмов" : "Ваш список фильмов к просмотру";
 
         List<Movie> movies = movieService.getMoviesAddedByUserIsWatched(new TgUser(userId), isWatched);
 
@@ -130,17 +134,16 @@ public class DefaultMessageHandler implements InputMessageHandler{
             replyMessage = replyUtil.textReply(chatId, reply);
 
             movies.forEach(movie1 -> {
-                try {
-                    SendMessage sendMessage = replyUtil.textReply(chatId, replyUtil.shortMovieDescription(movie1));
-                    if (isWatched) {
-                        sendMessage.setReplyMarkup(Keyboards.getWatchedMoviesButtons(movie1));
-                    } else {
-                        sendMessage.setReplyMarkup(Keyboards.getUnwatchedMoviesButtons(movie1));
-                    }
-                    bot.execute(sendMessage);
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
+
+                SendMessage movieMessage = replyUtil.textReply(chatId, replyUtil.shortMovieDescription(movie1));
+
+                if (isWatched) {
+                    movieMessage.setReplyMarkup(Keyboards.getWatchedMoviesButtons(movie1));
+                } else {
+                    movieMessage.setReplyMarkup(Keyboards.getUnwatchedMoviesButtons(movie1));
                 }
+
+                bot.executeMessage(movieMessage);
             });
 
         } else {
@@ -148,5 +151,36 @@ public class DefaultMessageHandler implements InputMessageHandler{
         }
         return replyMessage;
     }
+
+    private SendMessage setSubscription(Message message, boolean isSubscribed) {
+        SendMessage replyMessage;
+
+        TgUser user = tgUserService.getOrCreateUserFromMessage(message);
+        UserChoiceData userChoiceData = userChoiceDataService.getUserChoiceData(user).orElse(null);
+
+        if (isSubscribed) {
+            if (userChoiceData != null && userChoiceData.getRating() != null) {
+                try {
+                    tgUserService.setUsersSubscriptionStatus(user, true);
+                    replyMessage = replyUtil.textReply(message.getChatId(), "Вы подписались на рассылку!");
+                } catch (Exception e) {
+                    replyMessage = replyUtil.textReply(message.getChatId(), "Произошла ошибка. Попробуйте снова.");
+                }
+            } else {
+                replyMessage = replyUtil.textReply(message.getChatId(), "Вы еще не указали предпочтения для поиска. " +
+                                                                                "Нажмите /preferences, чтобы это исправить.");
+            }
+        } else {
+            try {
+                tgUserService.setUsersSubscriptionStatus(user, false);
+                replyMessage = replyUtil.textReply(message.getChatId(), "Вы отписались от рассылки!");
+            } catch (Exception e) {
+                replyMessage = replyUtil.textReply(message.getChatId(), "Произошла ошибка. Попробуйте снова.");
+            }
+        }
+
+        return replyMessage;
+    }
+
 
 }
