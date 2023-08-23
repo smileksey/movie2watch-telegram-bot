@@ -11,6 +11,10 @@ public class UrlBuilder {
                 .append("&rating.imdb=")
                 .append(rating)
                 .append("-10.0");
+
+        if (!genre.equals("короткометражка"))
+            url.append("&genres.name=!короткометражка");
+
         return url.toString();
     }
 
