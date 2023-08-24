@@ -37,7 +37,7 @@ public class KinopoiskApi {
 
     public Movie getRandomMovieByUrl(String url) {
         try {
-            int randomPage = getRandomHorrorPage(url);
+            int randomPage = getRandomPage(url);
             String resultUrl = url + "&page=" + randomPage;
             //
             System.out.println(resultUrl);
@@ -55,7 +55,7 @@ public class KinopoiskApi {
     }
 
     public Movie getRandomHorrorMovie() {
-        int randomPage = getRandomHorrorPage(HORROR_FILTERED_URL);
+        int randomPage = getRandomPage(HORROR_FILTERED_URL);
         String url =
                 "https://api.kinopoisk.dev/v1/movie?selectFields=id name alternativeName year description poster countries genres videos rating&limit=1&name=!null&year=1980-2030&description=!null&rating.imdb=5.5-10.0&genres.name=ужасы&page="
                         + randomPage;
@@ -68,7 +68,7 @@ public class KinopoiskApi {
         return movie;
     }
 
-    private int getRandomHorrorPage(String url) {
+    private int getRandomPage(String url) {
         PaginatedResponse paginatedResponse = getPaginatedResponse(url);
         int pageCount = paginatedResponse.getPages();
 
