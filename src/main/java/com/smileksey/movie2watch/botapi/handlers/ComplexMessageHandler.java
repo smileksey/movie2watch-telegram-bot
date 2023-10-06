@@ -5,6 +5,7 @@ import com.smileksey.movie2watch.KinopoiskApi;
 import com.smileksey.movie2watch.botapi.BotState;
 import com.smileksey.movie2watch.cache.MovieCache;
 import com.smileksey.movie2watch.models.TgUser;
+import com.smileksey.movie2watch.models.TgUserMovie;
 import com.smileksey.movie2watch.models.kinopoiskmodels.Movie;
 import com.smileksey.movie2watch.services.MovieService;
 import com.smileksey.movie2watch.services.TgUserService;
@@ -71,12 +72,12 @@ public class ComplexMessageHandler implements InputMessageHandler {
                 break;
 
             case "/markaswatched":
-                movie = movieService.getMovieById(Integer.parseInt(command[1]));
+                int movieId = Integer.parseInt(command[1]);
+                TgUserMovie userMovie = movieService.getUserMovie(userId, movieId);
 
-                if (movie != null) {
+                if (userMovie != null) {
                     try {
-                        tgUser = tgUserService.getOrCreateUserFromMessage(message);
-                        movieService.changeWatchedStatus(movie, true, tgUser);
+                        movieService.changeWatchedStatus(userMovie, true);
                         replyMessage = replyUtil.textReply(chatId, "Фильм отмечен как просмотренный");
                     } catch (Exception e) {
                         replyMessage = replyUtil.textReply(chatId, "Не удалось применить Изменения. Попробуйте еще раз.");

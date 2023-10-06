@@ -8,11 +8,11 @@ import java.io.Serializable;
 @Embeddable
 public class TgUserMovieKey implements Serializable {
     @Column(name = "tg_user_id")
-    private int tgUserId;
+    private long tgUserId;
     @Column(name = "movie_id")
     private int movieId;
 
-    public TgUserMovieKey(int tgUserId, int movieId) {
+    public TgUserMovieKey(long tgUserId, int movieId) {
         this.tgUserId = tgUserId;
         this.movieId = movieId;
     }
@@ -20,11 +20,11 @@ public class TgUserMovieKey implements Serializable {
     public TgUserMovieKey() {
     }
 
-    public int getTgUserId() {
+    public long getTgUserId() {
         return tgUserId;
     }
 
-    public void setTgUserId(int tgUserId) {
+    public void setTgUserId(long tgUserId) {
         this.tgUserId = tgUserId;
     }
 
@@ -49,7 +49,7 @@ public class TgUserMovieKey implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = tgUserId;
+        int result = (int) (tgUserId ^ (tgUserId >>> 32));
         result = 31 * result + movieId;
         return result;
     }
