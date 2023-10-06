@@ -17,24 +17,19 @@ public class TgUser {
     private String userName;
     @Column(name = "first_name")
     private String firstName;
-    @Column(name = "last_name")
-    private String lastName;
     @OneToOne(mappedBy = "tgUser")
     private UserChoiceData userChoiceData;
-    @OneToMany(mappedBy = "addedByUser")
-    private List<Movie> addedMovies;
     @Column(name = "is_subscribed")
     private boolean isSubscribed;
 
     public TgUser() {
     }
 
-    public TgUser(long id, long chatId, String userName, String firstName, String lastName, boolean isSubscribed) {
+    public TgUser(long id, long chatId, String userName, String firstName, boolean isSubscribed) {
         this.id = id;
         this.chatId = chatId;
         this.userName = userName;
         this.firstName = firstName;
-        this.lastName = lastName;
         this.isSubscribed = isSubscribed;
     }
 
@@ -74,14 +69,6 @@ public class TgUser {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public UserChoiceData getUserChoiceData() {
         return userChoiceData;
     }
@@ -103,7 +90,6 @@ public class TgUser {
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
                 '}';
     }
 }

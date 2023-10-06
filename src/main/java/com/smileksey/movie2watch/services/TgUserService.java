@@ -44,7 +44,6 @@ public class TgUserService {
             tgUser.setChatId(message.getChatId());
             tgUser.setUserName(message.getFrom().getUserName());
             tgUser.setFirstName(message.getFrom().getFirstName());
-            tgUser.setLastName(message.getFrom().getLastName());
 
             save(tgUser);
         }

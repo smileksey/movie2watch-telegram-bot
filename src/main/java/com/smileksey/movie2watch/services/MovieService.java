@@ -28,8 +28,10 @@ public class MovieService {
         movieRepository.save(movie);
     }
 
+    //TODO
     public List<Movie> getMoviesAddedByUser(TgUser tgUser) {
-        return movieRepository.findAllByAddedByUser(tgUser);
+        //return movieRepository.findAllByAddedByUser(tgUser);
+        return null;
     }
 
     public Movie getMovieById(int id) {
@@ -37,13 +39,18 @@ public class MovieService {
         return movie.orElse(null);
     }
 
+    //TODO
     public List<Movie> getMoviesAddedByUserIsWatched(TgUser tgUser, boolean isWatched) {
-        return movieRepository.findByAddedByUserAndAndIsWatched(tgUser, isWatched);
+        //return movieRepository.findByAddedByUserAndAndIsWatched(tgUser, isWatched);
+        return null;
     }
 
+    //TODO
     @Transactional
     public void changeWatchedStatus(Movie movie, boolean isWatched, TgUser tgUser) {
-        movie.setWatched(isWatched);
+        //TODO поле isWatched переехало в класс UserMovie
+        //movie.setWatched(isWatched);
+
         save(movie, tgUser);
     }
 
@@ -52,9 +59,14 @@ public class MovieService {
         movieRepository.deleteMovieById(id);
     }
 
+    //TODO
     @Transactional
     public void enrichMovieData(Movie movie, TgUser tgUser) {
-        movie.setAddedByUser(tgUser);
-        movie.setAddedAt(LocalDateTime.now());
+
+        //TODO 'addedByUser' переместилось в класс UserMovie
+        //movie.setAddedByUser(tgUser);
+
+        //TODO 'addedAt' переместилось в класс UserMovie
+        //movie.setAddedAt(LocalDateTime.now());
     }
 }

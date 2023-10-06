@@ -9,8 +9,10 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
-    List<Movie> findAllByAddedByUser(TgUser tgUser);
+    //TODO
+    //List<Movie> findAllByAddedByUser(TgUser tgUser);
 
-    List<Movie> findByAddedByUserAndAndIsWatched(TgUser tgUser, boolean isWatched);
+    //TODO
+    //List<Movie> findByAddedByUserAndAndIsWatched(TgUser tgUser, boolean isWatched);
     void deleteMovieById(int id);
 }

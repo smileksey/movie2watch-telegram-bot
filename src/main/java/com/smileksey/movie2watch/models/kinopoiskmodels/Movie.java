@@ -30,29 +30,16 @@ public class Movie {
     private Video videos;
     @Transient
     private Rating rating;
-    @ManyToOne
-    @JoinColumn(name = "added_by_user_id", referencedColumnName = "id")
-    private TgUser addedByUser;
-    @Column(name = "added_at")
-    private LocalDateTime addedAt;
-    @Column(name = "is_watched")
-    private boolean isWatched;
-    @Column(name = "user_rating")
-    private int userRating;
 
     public Movie() {
     }
 
-    public Movie(int id, String name, String alternativeName, String year, String description, TgUser addedByUser, LocalDateTime addedAt, boolean isWatched, int userRating) {
+    public Movie(int id, String name, String alternativeName, String year, String description) {
         this.id = id;
         this.name = name;
         this.alternativeName = alternativeName;
         this.year = year;
         this.description = description;
-        this.addedByUser = addedByUser;
-        this.addedAt = addedAt;
-        this.isWatched = isWatched;
-        this.userRating = userRating;
     }
 
     public int getId() {
@@ -133,38 +120,6 @@ public class Movie {
 
     public void setRating(Rating rating) {
         this.rating = rating;
-    }
-
-    public TgUser getAddedByUser() {
-        return addedByUser;
-    }
-
-    public void setAddedByUser(TgUser addedByUser) {
-        this.addedByUser = addedByUser;
-    }
-
-    public LocalDateTime getAddedAt() {
-        return addedAt;
-    }
-
-    public void setAddedAt(LocalDateTime addedAt) {
-        this.addedAt = addedAt;
-    }
-
-    public boolean isWatched() {
-        return isWatched;
-    }
-
-    public void setWatched(boolean watched) {
-        isWatched = watched;
-    }
-
-    public int getUserRating() {
-        return userRating;
-    }
-
-    public void setUserRating(int userRating) {
-        this.userRating = userRating;
     }
 
     @Override
