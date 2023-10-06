@@ -97,7 +97,6 @@ public class TgUser {
     public void setSubscribed(boolean subscribed) {
         isSubscribed = subscribed;
     }
-
     @Override
     public String toString() {
         return "User{" +
