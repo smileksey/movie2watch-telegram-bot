@@ -1,6 +1,7 @@
 package com.smileksey.movie2watch.models.kinopoiskmodels;
 
 import com.smileksey.movie2watch.models.TgUser;
+import com.smileksey.movie2watch.models.TgUserMovie;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,10 @@ public class Movie {
     private Video videos;
     @Transient
     private Rating rating;
+
+    //для связи many-to-many с TgUser
+    @OneToMany(mappedBy = "movie")
+    List<TgUserMovie> savedMovies;
 
     public Movie() {
     }
@@ -120,6 +125,14 @@ public class Movie {
 
     public void setRating(Rating rating) {
         this.rating = rating;
+    }
+
+    public List<TgUserMovie> getSavedMovies() {
+        return savedMovies;
+    }
+
+    public void setSavedMovies(List<TgUserMovie> savedMovies) {
+        this.savedMovies = savedMovies;
     }
 
     @Override

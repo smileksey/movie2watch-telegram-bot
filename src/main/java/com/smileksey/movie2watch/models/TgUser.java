@@ -22,6 +22,10 @@ public class TgUser {
     @Column(name = "is_subscribed")
     private boolean isSubscribed;
 
+    //Для связи many-to-many с Movie
+    @OneToMany(mappedBy = "tgUser")
+    List<TgUserMovie> savedMovies;
+
     public TgUser() {
     }
 
@@ -84,6 +88,15 @@ public class TgUser {
     public void setSubscribed(boolean subscribed) {
         isSubscribed = subscribed;
     }
+
+    public List<TgUserMovie> getSavedMovies() {
+        return savedMovies;
+    }
+
+    public void setSavedMovies(List<TgUserMovie> savedMovies) {
+        this.savedMovies = savedMovies;
+    }
+
     @Override
     public String toString() {
         return "User{" +
