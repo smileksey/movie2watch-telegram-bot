@@ -9,10 +9,5 @@ import java.util.List;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
-    //TODO
-    //List<Movie> findAllByAddedByUser(TgUser tgUser);
 
-    //TODO
-    //List<Movie> findByAddedByUserAndAndIsWatched(TgUser tgUser, boolean isWatched);
-    void deleteMovieById(int id);
 }

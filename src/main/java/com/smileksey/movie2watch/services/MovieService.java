@@ -52,23 +52,28 @@ public class MovieService {
         return userMovie.orElse(null);
     }
 
-    public List<Movie> getMoviesAddedByUserIsWatched(TgUser tgUser, boolean isWatched) {
+    public List<Movie> getMoviesByUserAndIsWatched(long userId, boolean isWatched) {
 
-        List<TgUserMovie> userMovies = userMovieRepository.findAllByIsWatched(isWatched);
-        return userMovies.stream().map(userMovie -> userMovie.getMovie()).collect(Collectors.toList());
+        Optional<List<TgUserMovie>> optionalMoviesList = userMovieRepository.findAllByTgUserAndIsWatched(new TgUser(userId), isWatched);
+
+        if(optionalMoviesList.isPresent()) {
+            return optionalMoviesList.get().stream().map(userMovie -> userMovie.getMovie()).collect(Collectors.toList());
+        } else {
+            return null;
+        }
+
+
     }
 
     @Transactional
     public void changeWatchedStatus(TgUserMovie userMovie, boolean isWatched) {
-
         userMovie.setWatched(isWatched);
         saveTgUserMovie(userMovie);
     }
 
-    //TODO
     @Transactional
-    public void deleteMovieById(int id) {
-        movieRepository.deleteMovieById(id);
+    public void deleteMovieById(long userId, int movieId) {
+        userMovieRepository.deleteById(new TgUserMovieKey(userId, movieId));
     }
 
     @Transactional

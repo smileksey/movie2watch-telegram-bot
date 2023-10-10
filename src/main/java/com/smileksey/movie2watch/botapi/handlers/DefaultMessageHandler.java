@@ -128,7 +128,7 @@ public class DefaultMessageHandler implements InputMessageHandler{
         SendMessage replyMessage;
         String reply = isWatched ? "Ваш список просмотренных фильмов" : "Ваш список фильмов к просмотру";
 
-        List<Movie> movies = movieService.getMoviesAddedByUserIsWatched(new TgUser(userId), isWatched);
+        List<Movie> movies = movieService.getMoviesByUserAndIsWatched(userId, isWatched);
 
         if (!movies.isEmpty()) {
             replyMessage = replyUtil.textReply(chatId, reply);

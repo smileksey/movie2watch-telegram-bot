@@ -49,7 +49,7 @@ public class ComplexMessageHandler implements InputMessageHandler {
 
         switch (command[0]) {
             case "/delete":
-                movieService.deleteMovieById(Integer.parseInt(command[1]));
+                movieService.deleteMovieById(userId, Integer.parseInt(command[1]));
                 replyMessage = replyUtil.textReply(message.getChatId(), "Фильм удален");
                 break;
 
