@@ -60,6 +60,12 @@ public class ReplyUtil {
                 builder.append(" / ").append(movie.getAlternativeName());
             }
 
+            if (movie.isSeries()) {
+                builder.append("\n")
+                        .append("\n")
+                        .append("Сериал");
+            }
+
             builder.append("\n")
                     .append("\n")
                     .append(movie.getYear()).append("\n")

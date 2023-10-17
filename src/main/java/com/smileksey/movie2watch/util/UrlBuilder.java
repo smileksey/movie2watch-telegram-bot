@@ -3,7 +3,7 @@ package com.smileksey.movie2watch.util;
 
 public class UrlBuilder {
     public static String buildUrl(String genre, String year, String rating) {
-        StringBuilder url = new StringBuilder("https://api.kinopoisk.dev/v1/movie?selectFields=id name alternativeName year description poster countries genres videos rating&limit=1&name=!null&description=!null");
+        StringBuilder url = new StringBuilder("https://api.kinopoisk.dev/v1.3/movie?selectFields=id name alternativeName year description poster countries genres videos rating isSeries&limit=1&name=!null&description=!null");
         url.append("&genres.name=")
                 .append(genre)
                 .append("&year=")

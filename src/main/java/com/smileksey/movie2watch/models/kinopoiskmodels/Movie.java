@@ -1,5 +1,6 @@
 package com.smileksey.movie2watch.models.kinopoiskmodels;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smileksey.movie2watch.models.TgUser;
 import com.smileksey.movie2watch.models.TgUserMovie;
 import jakarta.persistence.*;
@@ -31,6 +32,8 @@ public class Movie {
     private Video videos;
     @Transient
     private Rating rating;
+    @Transient
+    private boolean isSeries;
 
     //для связи many-to-many с TgUser
     @OneToMany(mappedBy = "movie")
@@ -135,11 +138,22 @@ public class Movie {
         this.savedMovies = savedMovies;
     }
 
+    @JsonProperty(value = "isSeries")
+    public boolean isSeries() {
+        return isSeries;
+    }
+
+    public void setSeries(boolean series) {
+        isSeries = series;
+    }
+
     @Override
     public String toString() {
         return "Movie{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", year='" + year + '\'' +
+                ", isSeries=" + isSeries +
                 '}';
     }
 }
