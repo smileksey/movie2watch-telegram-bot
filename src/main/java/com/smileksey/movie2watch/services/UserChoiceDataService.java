@@ -22,6 +22,7 @@ public class UserChoiceDataService {
     @Transactional
     public void save(UserChoiceData userChoiceData) {
         userChoiceDataRepository.save(userChoiceData);
+
     }
 
     public Optional<UserChoiceData> getUserChoiceData(TgUser tgUser) {

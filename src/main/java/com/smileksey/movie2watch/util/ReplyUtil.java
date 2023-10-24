@@ -1,15 +1,23 @@
 package com.smileksey.movie2watch.util;
 
 import com.smileksey.movie2watch.models.kinopoiskmodels.Movie;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Component
+@PropertySource("classpath:application.properties")
 public class ReplyUtil {
+    @Value("${log.directory}")
+    private String logDirectory;
 
     public SendMessage startReply(long chatId) {
         String reply = "Привет! Чтобы начать, нажми 'Подобрать фильм' или воспользуйся меню.\n" +
@@ -138,6 +146,20 @@ public class ReplyUtil {
 
         return builder.toString();
     }
+
+    public File getLastLog() {
+        File directory = new File(logDirectory);
+
+        if (directory.isDirectory()) {
+            File[] logs = directory.listFiles(file -> file.isFile());
+            if (logs != null) {
+                Optional<File> opLog = Arrays.stream(logs).max((f1, f2) -> Long.compare(f1.lastModified(), f2.lastModified()));
+                return opLog.orElse(null);
+            }
+        }
+        return null;
+    }
+
 
 
 }

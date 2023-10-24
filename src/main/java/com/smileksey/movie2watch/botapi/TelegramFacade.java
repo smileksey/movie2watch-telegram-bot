@@ -1,7 +1,10 @@
 package com.smileksey.movie2watch.botapi;
 
+import com.smileksey.movie2watch.botapi.handlers.DefaultMessageHandler;
 import com.smileksey.movie2watch.util.Keyboards;
 import com.smileksey.movie2watch.cache.UserDataCache;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -12,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.*;
 public class TelegramFacade {
     private final UserDataCache userDataCache;
     private final BotStateContext botStateContext;
+    private final static Logger logger = LogManager.getLogger(TelegramFacade.class);
 
     @Autowired
     public TelegramFacade(UserDataCache userDataCache, BotStateContext botStateContext) {
@@ -45,6 +49,7 @@ public class TelegramFacade {
         switch (messageText) {
             case "/preferences":
                 botState = BotState.FILLING_PARAMETERS;
+                logger.info("User {} has started specifying preferences", inputMessage.getFrom().getUserName());
                 break;
             default:
                 botState = userDataCache.getUsersCurrentBotState(userId);

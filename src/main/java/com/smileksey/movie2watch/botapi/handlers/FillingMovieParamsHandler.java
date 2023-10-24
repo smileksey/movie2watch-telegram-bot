@@ -9,6 +9,8 @@ import com.smileksey.movie2watch.botapi.BotState;
 import com.smileksey.movie2watch.models.UserChoiceData;
 import com.smileksey.movie2watch.cache.UserDataCache;
 import jakarta.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,7 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
     private final TelegramFacade telegramFacade;
     private final UserChoiceDataService userChoiceDataService;
     private final TgUserService tgUserService;
+    private final static Logger logger = LogManager.getLogger(FillingMovieParamsHandler.class);
 
     @Autowired
     public FillingMovieParamsHandler(UserDataCache userDataCache, @Lazy TelegramFacade telegramFacade,
@@ -72,6 +75,7 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
         if (botState.equals(BotState.WAIT_FOR_YEAR)) {
 
             choiceData.setGenre(usersAnswer);
+            logger.info("User {} entered '{}' as a genre", tgUser.getUserName(), usersAnswer);
 
             replyMessage.setText("Укажи год.\nМожно указать период в формате 'yyyy-yyyy'\n(например 2000-2010)");
 
@@ -81,6 +85,7 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
         if (botState.equals(BotState.WAIT_FOR_RATING)) {
 
             choiceData.setYear(usersAnswer);
+            logger.info("User {} entered '{}' as a year", tgUser.getUserName(), usersAnswer);
 
             replyMessage.setText("Укажи минимальный рейтинг imdb (например 6 или 5.5):");
 
@@ -90,8 +95,11 @@ public class FillingMovieParamsHandler implements InputMessageHandler {
         if (botState.equals(BotState.PARAMETERS_FILLED)) {
 
             choiceData.setRating(usersAnswer);
+            logger.info("User {} entered '{}' as a rating", tgUser.getUserName(), usersAnswer);
 
             replyMessage.setText("Предпочтения сохранены!");
+
+            logger.info("Saved preferences for {}", tgUser.getUserName());
 
             replyMessage.setReplyMarkup(Keyboards.getMainMenuKeyboard());
 

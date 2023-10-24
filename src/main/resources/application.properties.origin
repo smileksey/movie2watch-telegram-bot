@@ -11,3 +11,10 @@ spring.jpa.properties.hibernate.show_sql=true
 # Bot config
 bot.name=
 bot.token=
+
+# API config
+api.headername=
+api.token=
+
+admin.chatId=
+log.directory=

@@ -10,6 +10,8 @@ import com.smileksey.movie2watch.services.UserChoiceDataService;
 import com.smileksey.movie2watch.util.Keyboards;
 import com.smileksey.movie2watch.util.ReplyUtil;
 import com.smileksey.movie2watch.util.UrlBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,6 +28,7 @@ public class ScheduledMessagesSender {
     private final ReplyUtil replyUtil;
     private final Bot bot;
     private final KinopoiskApi kinopoiskApi;
+    private final static Logger logger = LogManager.getLogger(ScheduledMessagesSender.class);
 
     @Autowired
     public ScheduledMessagesSender(TgUserService tgUserService, UserChoiceDataService userChoiceDataService, 
@@ -63,10 +66,15 @@ public class ScheduledMessagesSender {
                         bot.executeMessage(movieReply);
                     }
                 }
+
+                logger.info("Delivered scheduled movie list to {}", tgUser.getUserName());
+
             } else {
                 helloMessage = replyUtil.textReply(tgUser.getChatId(), "Похоже, ваших предпочтений нет в базе...\n" +
                         " Укажите их с помощью /preferences.");
                 bot.executeMessage(helloMessage);
+
+                logger.info("Tried to deliver scheduled movie list to {}, but preferences are NOT specified", tgUser.getUserName());
             }
         });
 

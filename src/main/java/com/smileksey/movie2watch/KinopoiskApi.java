@@ -3,6 +3,7 @@ package com.smileksey.movie2watch;
 import com.smileksey.movie2watch.models.kinopoiskmodels.Genre;
 import com.smileksey.movie2watch.models.kinopoiskmodels.Movie;
 import com.smileksey.movie2watch.models.kinopoiskmodels.PaginatedResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -14,12 +15,16 @@ import java.util.Random;
 @Component
 public class KinopoiskApi {
 
-    private final static String HORROR_FILTERED_URL = "https://api.kinopoisk.dev/v1.3/movie?selectFields=id&limit=1&name=!null&year=1980-2030&description=!null&rating.imdb=5.5-10.0&genres.name=ужасы";
+    @Value("${api.headername}")
+    private String apiHeaderName;
+
+    @Value("${api.token}")
+    private String apiToken;
 
     private HttpEntity<Void> constructGetRequest() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        httpHeaders.add("X-API-KEY", "4J4GAM8-7PDMX6P-NPRW8Q0-1WSM2VC");
+        httpHeaders.add(apiHeaderName, apiToken);
 
         return new HttpEntity<>(httpHeaders);
     }
@@ -30,7 +35,6 @@ public class KinopoiskApi {
 
         ResponseEntity<Movie> response = restTemplate.exchange(url, HttpMethod.GET, constructGetRequest(), Movie.class);
         Movie movie = response.getBody();
-        System.out.println(movie);
 
         return movie;
     }
@@ -39,33 +43,16 @@ public class KinopoiskApi {
         try {
             int randomPage = getRandomPage(url);
             String resultUrl = url + "&page=" + randomPage;
-            //
-            System.out.println(resultUrl);
 
             PaginatedResponse paginatedResponse = getPaginatedResponse(resultUrl);
 
             Movie movie = paginatedResponse.getDocs().get(0);
-            System.out.println(movie);
 
             return movie;
 
         } catch (Exception e) {
             return null;
         }
-    }
-
-    public Movie getRandomHorrorMovie() {
-        int randomPage = getRandomPage(HORROR_FILTERED_URL);
-        String url =
-                "https://api.kinopoisk.dev/v1.3/movie?selectFields=id name alternativeName year description poster countries genres videos rating&limit=1&name=!null&year=1980-2030&description=!null&rating.imdb=5.5-10.0&genres.name=ужасы&page="
-                        + randomPage;
-
-        PaginatedResponse paginatedResponse = getPaginatedResponse(url);
-
-        Movie movie = paginatedResponse.getDocs().get(0);
-        System.out.println(movie.getId());
-
-        return movie;
     }
 
     private int getRandomPage(String url) {
@@ -85,7 +72,6 @@ public class KinopoiskApi {
 
         return paginatedResponse.getBody();
     }
-
 
     public Movie getMovieById(int id) {
         String url = "https://api.kinopoisk.dev/v1.3/movie/" + id;
