@@ -20,8 +20,9 @@ public class ReplyUtil {
     private String logDirectory;
 
     public SendMessage startReply(long chatId) {
-        String reply = "Привет! Чтобы начать, нажми 'Подобрать фильм' или воспользуйся меню.\n" +
+        String reply = "Привет Чтобы начать, нажми '<b>Подобрать фильм</b>' или воспользуйся <b>меню</b>.\n" +
                         "Для справки нажми /help";
+
         return textReply(chatId, reply);
     }
 
@@ -62,10 +63,17 @@ public class ReplyUtil {
         if (movie != null) {
             StringBuilder builder = new StringBuilder();
 
-            builder.append(movie.getName());
+            builder
+                    .append("<b><u>")
+                    .append(movie.getName())
+                    .append("</u></b>");
 
             if (movie.getAlternativeName() != null) {
-                builder.append(" / ").append(movie.getAlternativeName());
+                builder
+                        .append(" / ")
+                        .append("<b><u>")
+                        .append(movie.getAlternativeName())
+                        .append("</u></b>");
             }
 
             if (movie.isSeries()) {
@@ -84,18 +92,33 @@ public class ReplyUtil {
             if (movie.getRating() != null) {
                 builder
                         .append("\n")
-                        .append("Рейтинг IMDb: ").append(movie.getRating().getImdb()).append("\n")
-                        .append("Рейтинг Кинопоиск: ").append(movie.getRating().getKp()).append("\n");
+                        .append("Рейтинг IMDb: ")
+                        .append("<b>")
+                        .append(movie.getRating().getImdb())
+                        .append("</b>")
+                        .append(" / КП: ")
+                        .append("<b>")
+                        .append(movie.getRating().getKp())
+                        .append("</b>")
+                        .append("\n");
             }
 
-            builder.append("\n").append(movie.getDescription()).append("\n");
+            builder
+                    .append("\n")
+                    .append("<i>")
+                    .append(movie.getDescription())
+                    .append("</i>")
+                    .append("\n");
 
             if (movie.getPoster() != null && movie.getPoster().getUrl() != null) {
-                builder.append(movie.getPoster().getUrl()).append("\n");
+                builder.append("<a href=\"" + movie.getPoster().getUrl() + "\"> </a>");
             }
 
             if (movie.getVideos() != null && !movie.getVideos().getTrailers().isEmpty()) {
-                builder.append("\n").append("Трейлер: ").append(movie.getVideos().getTrailers().get(0).getUrl());
+
+                builder
+                        .append("\n")
+                        .append("<a href=\"" + movie.getVideos().getTrailers().get(0).getUrl() + "\">Трейлер</a>");
             }
 
             return builder.toString();
@@ -130,11 +153,17 @@ public class ReplyUtil {
     public String shortMovieDescription(Movie movie) {
         StringBuilder builder = new StringBuilder();
 
-            builder.append(movie.getName());
+            builder
+                    .append("<b><u>")
+                    .append(movie.getName())
+                    .append("</u></b>");
 
             if (movie.getAlternativeName() != null) {
-                builder.append(" / ")
-                        .append(movie.getAlternativeName());
+                builder
+                        .append(" / ")
+                        .append("<b><u>")
+                        .append(movie.getAlternativeName())
+                        .append("</u></b>");
             }
 
             builder.append("\n")

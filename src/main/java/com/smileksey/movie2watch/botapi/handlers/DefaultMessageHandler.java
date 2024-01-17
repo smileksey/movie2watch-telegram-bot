@@ -166,6 +166,7 @@ public class DefaultMessageHandler implements InputMessageHandler{
             movies.forEach(movie1 -> {
 
                 SendMessage movieMessage = replyUtil.textReply(chatId, replyUtil.shortMovieDescription(movie1));
+                movieMessage.enableHtml(true);
 
                 if (isWatched) {
                     movieMessage.setReplyMarkup(Keyboards.getWatchedMoviesButtons(movie1));
@@ -179,6 +180,7 @@ public class DefaultMessageHandler implements InputMessageHandler{
         } else {
             replyMessage = replyUtil.textReply(chatId, "Вы пока не добавили ни одного фильма");
         }
+
         return replyMessage;
     }
 

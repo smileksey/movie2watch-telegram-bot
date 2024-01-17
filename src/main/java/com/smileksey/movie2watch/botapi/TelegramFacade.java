@@ -63,6 +63,7 @@ public class TelegramFacade {
             replyMessage.setReplyMarkup(Keyboards.getMainMenuKeyboard());
         }
 
+        replyMessage.enableHtml(true);
         return replyMessage;
     }
 
