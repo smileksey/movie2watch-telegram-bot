@@ -41,7 +41,7 @@ public class ScheduledMessagesSender {
     }
 
 
-    @Scheduled(cron = "0 0 17 * * 5,6")
+    @Scheduled(cron = "0 0 17 * * 3,6")
     private void sendMovieCompilation() {
         List<TgUser> subscribedUsers = tgUserService.getSubscribedUsers();
 
@@ -63,6 +63,9 @@ public class ScheduledMessagesSender {
                     if (movie != null) {
                         movieReply = replyUtil.textReply(tgUser.getChatId(), replyUtil.movieDescription(movie));
                         movieReply.setReplyMarkup(Keyboards.getBottomLineButtons("/customRandom", movie));
+                        //enable HTML formatting
+                        movieReply.enableHtml(true);
+
                         bot.executeMessage(movieReply);
                     }
                 }
