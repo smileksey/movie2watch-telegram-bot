@@ -41,7 +41,7 @@ public class ScheduledMessagesSender {
     }
 
 
-    @Scheduled(cron = "0 0 17 * * 3,6")
+    @Scheduled(cron = "0 0 17 * * 5,6")
     private void sendMovieCompilation() {
         List<TgUser> subscribedUsers = tgUserService.getSubscribedUsers();
 
